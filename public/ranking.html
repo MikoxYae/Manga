@@ -1,36 +1,83 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ranking - MikoReads</title><link rel="stylesheet" href="assets/style.css"></head><body>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ranking - MikoReads</title>
+<meta name="description" content="Top ranking manga, manhwa, manhua and webtoon titles. Weekly, monthly and all-time charts.">
+<link rel="stylesheet" href="assets/style.css">
+</head><body>
 <header class="topbar">
   <a class="brand" href="index.html">
     <span class="brand-mark">M</span>
     <span><strong>MikoReads</strong><small>Manga and Manhwa</small></span>
   </a>
-  <nav class="nav"><a href="index.html" class="">Home</a>
-<a href="browse.html" class="">Browse</a>
-<a href="latest.html" class="">Latest</a>
-<a href="ranking.html" class="active">Ranking</a>
-<a href="admin.html" class="">Admin</a></nav>
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="browse.html">Browse</a>
+    <a href="latest.html">Latest</a>
+    <a href="ranking.html" class="active">Ranking</a>
+    <a href="admin.html">Admin</a>
+  </nav>
   <div class="actions">
     <a class="login-link" href="login.html">Login</a>
     <button class="menu-btn" id="menuBtn">Menu</button>
   </div>
 </header>
+
 <main class="wrap">
-  <section class="page-title"><span class="eyebrow">Top list</span><h1>Weekly ranking</h1><p>Ranking page UI for most-read series, top-rated titles and popular chapter updates.</p></section>
-  <section class="content-card">
-    <ol class="ranking">
-      <li><a href="detail.html"><span>01</span><b>Solo Leveling</b><small>9.6 · Manhwa</small></a></li>
-      <li><a href="detail.html"><span>02</span><b>One Piece</b><small>9.8 · Manga</small></a></li>
-      <li><a href="detail.html"><span>03</span><b>Omniscient Reader</b><small>9.4 · Manhwa</small></a></li>
-      <li><a href="detail.html"><span>04</span><b>Magic Emperor</b><small>9.1 · Manhua</small></a></li>
-      <li><a href="detail.html"><span>05</span><b>Blue Lock</b><small>9.0 · Manga</small></a></li>
-      <li><a href="detail.html"><span>06</span><b>The Beginning After The End</b><small>9.3 · Webtoon</small></a></li>
-      <li><a href="detail.html"><span>07</span><b>Tower of God</b><small>9.2 · Manhwa</small></a></li>
-      <li><a href="detail.html"><span>08</span><b>Spy x Family</b><small>9.0 · Manga</small></a></li>
-    </ol>
+  <section class="page-title">
+    <span class="eyebrow">Top charts</span>
+    <h1>Rankings</h1>
+    <p>Most-read and highest-rated series this week, month and of all time. Demo data updated regularly.</p>
+  </section>
+
+  <section class="twocol">
+    <div class="content-card">
+      <div class="section-head" style="margin-bottom:20px">
+        <h2>Top series</h2>
+        <div class="rank-tabs-wrap tabs" id="rankTabs">
+          <button class="active" data-period="weekly" onclick="switchRank(this,'weekly')">Weekly</button>
+          <button data-period="monthly" onclick="switchRank(this,'monthly')">Monthly</button>
+          <button data-period="alltime" onclick="switchRank(this,'alltime')">All Time</button>
+        </div>
+      </div>
+      <ol class="ranking-list full-ranking" id="rankList"></ol>
+    </div>
+
+    <aside>
+      <div class="sidebar-card" style="margin-bottom:20px">
+        <span class="eyebrow">Stats</span>
+        <h2 style="margin:8px 0 18px;font-size:22px;letter-spacing:-.04em">Library overview</h2>
+        <div style="display:grid;gap:10px">
+          <div class="meta-item"><b>1,240</b><span>Total series</span></div>
+          <div class="meta-item"><b>12,860</b><span>Total chapters</span></div>
+          <div class="meta-item"><b>4 types</b><span>Manga, Manhwa, Manhua, Webtoon</span></div>
+          <div class="meta-item"><b>Clean only</b><span>Content filter mode</span></div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <span class="eyebrow">Rising</span>
+        <h2 style="margin:8px 0 16px;font-size:22px;letter-spacing:-.04em">New entries</h2>
+        <ol class="ranking-list">
+          <li class="ranking-item"><a href="detail.html"><div class="rank-num">01</div><div class="rank-info"><b>Pick Me Up</b><small>Manhwa · Fantasy</small></div></a></li>
+          <li class="ranking-item"><a href="detail.html"><div class="rank-num">02</div><div class="rank-info"><b>Nano Machine</b><small>Manhwa · Martial Arts</small></div></a></li>
+          <li class="ranking-item"><a href="detail.html"><div class="rank-num">03</div><div class="rank-info"><b>Eleceed</b><small>Manhwa · Action</small></div></a></li>
+        </ol>
+      </div>
+    </aside>
   </section>
 </main>
-<footer class="footer"><strong>MikoReads</strong><span>Clean manga, manhwa, manhua and webtoon UI prototype.</span></footer>
+
+<footer class="footer">
+  <strong>MikoReads</strong>
+  <span>Premium manga, manhwa, manhua and webtoon reading experience.</span>
+</footer>
 <script src="assets/app.js"></script>
+<script>
+function switchRank(btn, period){
+  document.querySelectorAll("#rankTabs button").forEach(function(b){ b.classList.remove("active"); });
+  btn.classList.add("active");
+  renderRanking(period);
+}
+</script>
 </body></html>
