@@ -1,39 +1,118 @@
 import os
-from pymongo import MongoClient, ASCENDING, DESCENDING
-from pymongo.errors import ConnectionFailure
+from urllib.parse import urlparse
+from pymongo import MongoClient, ASCENDING, DESCENDING, TEXT
+from pymongo.errors import ConnectionFailure, ConfigurationError
 
 _client = None
 _db = None
 
+
+def _load_dotenv():
+    """Small .env loader so this project does not need python-dotenv."""
+    env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
+    if not os.path.exists(env_path):
+        return
+    try:
+        with open(env_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, value = line.split("=", 1)
+                key = key.strip()
+                value = value.strip().strip('"').strip("'")
+                os.environ.setdefault(key, value)
+    except Exception:
+        pass
+
+
+def _database_name_from_uri(uri):
+    """Return DB name from Mongo URI path, or None when URI has no DB path."""
+    try:
+        parsed = urlparse(uri)
+        name = (parsed.path or "").strip("/")
+        return name or None
+    except Exception:
+        return None
+
+
+def get_mongo_uri():
+    _load_dotenv()
+    return (
+        os.environ.get("MONGODB_URI")
+        or os.environ.get("MONGO_URI")
+        or "mongodb://localhost:27017/mikoreads"
+    )
+
+
+def get_db_name(uri=None):
+    uri = uri or get_mongo_uri()
+    return (
+        os.environ.get("MONGODB_DB")
+        or os.environ.get("MONGO_DB_NAME")
+        or _database_name_from_uri(uri)
+        or "mikoreads"
+    )
+
+
 def get_db():
     global _client, _db
     if _db is None:
-        uri = os.environ.get("MONGODB_URI", "mongodb://localhost:27017/mikoreads")
-        _client = MongoClient(uri, serverSelectionTimeoutMS=5000)
-        _db = _client.get_default_database() if "/" in uri.split("@")[-1] else _client["mikoreads"]
+        uri = get_mongo_uri()
+        db_name = get_db_name(uri)
+        _client = MongoClient(uri, serverSelectionTimeoutMS=8000)
+        try:
+            _db = _client.get_default_database()
+        except ConfigurationError:
+            _db = _client[db_name]
+        if _db.name != db_name and not _database_name_from_uri(uri):
+            _db = _client[db_name]
     return _db
 
-def init_db():
+
+def init_db(seed_demo=True):
     db = get_db()
     try:
         db.client.admin.command("ping")
-        print("[DB] MongoDB connected successfully")
-    except ConnectionFailure as e:
+        print(f"[DB] MongoDB connected successfully: {db.name}")
+    except Exception as e:
         print(f"[DB] MongoDB connection failed: {e}")
-        return
+        return False
 
+    ensure_indexes(db)
+
+    if seed_demo and db.series.count_documents({}) == 0:
+        _seed(db)
+        print("[DB] Seeded demo data")
+
+    return True
+
+
+def ensure_indexes(db):
+    db.series.create_index([("slug", ASCENDING)], unique=True, sparse=True)
     db.series.create_index([("title", ASCENDING)])
     db.series.create_index([("type", ASCENDING)])
     db.series.create_index([("status", ASCENDING)])
     db.series.create_index([("rating", DESCENDING)])
     db.series.create_index([("views", DESCENDING)])
+    db.series.create_index([("popularity", DESCENDING)])
     db.series.create_index([("updated_at", DESCENDING)])
-    db.chapters.create_index([("series_id", ASCENDING), ("number", DESCENDING)])
-    db.chapters.create_index([("created_at", DESCENDING)])
+    db.series.create_index([("source", ASCENDING)])
+    db.series.create_index([("source_ids.anilist", ASCENDING)], sparse=True)
+    db.series.create_index([("source_ids.mangadex", ASCENDING)], sparse=True)
+    db.series.create_index([("is_adult", ASCENDING)])
+    db.series.create_index(
+        [("title", TEXT), ("alt_title", TEXT), ("description", TEXT), ("genres", TEXT)],
+        default_language="english",
+        name="series_text_search",
+    )
 
-    if db.series.count_documents({}) == 0:
-        _seed(db)
-        print("[DB] Seeded demo data")
+    db.chapters.create_index([("series_id", ASCENDING), ("number", DESCENDING)])
+    db.chapters.create_index([("series_title", ASCENDING)])
+    db.chapters.create_index([("created_at", DESCENDING)])
+    db.import_runs.create_index([("started_at", DESCENDING)])
+    db.import_runs.create_index([("source", ASCENDING), ("status", ASCENDING)])
+
 
 def _seed(db):
     import datetime
