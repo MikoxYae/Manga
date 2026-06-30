@@ -7,12 +7,21 @@ const badgeClass = {
   "Manga":"type-manga","Manhwa":"type-manhwa","Manhua":"type-manhua","Webtoon":"type-webtoon"
 };
 
+function coverImg(url, title, bgClass){
+  if(url){
+    return '<img src="'+url+'" alt="'+title+'" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.classList.add(\''+bgClass+'\')">';
+  }
+  return "";
+}
+
 function card(item){
   const bg = coverClass[item.type] || "manga-bg";
   const bc = badgeClass[item.type] || "";
   const ch = item.latest_chapter || ("Ch. " + (item.chapter_count || "?"));
+  const hasCover = item.cover_url ? "" : " " + bg;
   return `<a class="manga-card" href="detail.html?id=${item.id}" data-type="${item.type}">
-    <div class="cover ${bg}">
+    <div class="cover${hasCover}">
+      ${coverImg(item.cover_url, item.title, bg)}
       <span class="cover-badge">${item.type}</span>
       <span class="cover-title">${item.title}</span>
     </div>
@@ -31,8 +40,12 @@ function card(item){
 function feedRow(item){
   const bg = coverClass[item.type] || "manga-bg";
   const bc = badgeClass[item.type] || "";
+  const hasCover = item.cover_url ? "" : " " + bg;
+  const imgHtml = item.cover_url
+    ? '<img src="'+item.cover_url+'" alt="'+item.title+'" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.classList.add(\''+bg+'\')">'
+    : item.title.substring(0,4);
   return `<a class="feed-item" href="detail.html?id=${item.id}">
-    <div class="feed-cover ${bg}">${item.title.substring(0,4)}</div>
+    <div class="feed-cover${hasCover}">${imgHtml}</div>
     <div class="feed-info">
       <b>${item.title}</b>
       <div class="sub"><span class="badge ${bc}" style="font-size:10px;padding:3px 7px">${item.type}</span> ${(item.genres||[])[0]||""}</div>
@@ -47,10 +60,15 @@ function feedRow(item){
 function latestRow(item){
   const bg = coverClass[item.type] || "manga-bg";
   const bc = badgeClass[item.type] || "";
+  const seriesTitle = item.series_title || item.title || "";
+  const hasCover = item.cover_url ? "" : " " + bg;
+  const imgHtml = item.cover_url
+    ? '<img src="'+item.cover_url+'" alt="'+seriesTitle+'" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.classList.add(\''+bg+'\')">'
+    : seriesTitle.substring(0,6);
   return `<a class="latest-item" href="detail.html?id=${item.id}">
-    <div class="latest-cover ${bg}">${item.series_title ? item.series_title.substring(0,6) : ""}</div>
+    <div class="latest-cover${hasCover}">${imgHtml}</div>
     <div class="latest-info">
-      <h4>${item.series_title||item.title||""}</h4>
+      <h4>${seriesTitle}</h4>
       <div class="sub"><span class="badge ${bc}" style="font-size:10px;padding:3px 7px">${item.type||""}</span></div>
     </div>
     <div class="latest-right">
@@ -195,9 +213,24 @@ async function renderDetail(){
   if(genreEl) genreEl.innerHTML = (series.genres||[]).map(g => `<span class="genre-tag">${g}</span>`).join("");
   if(coverEl){
     const bg = coverClass[series.type] || "manga-bg";
-    coverEl.className = "big-cover " + bg;
-    const sp = coverEl.querySelector("span");
-    if(sp) sp.textContent = series.title;
+    if(series.cover_url){
+      coverEl.className = "big-cover";
+      const existing = coverEl.querySelector("span");
+      const img = document.createElement("img");
+      img.src = series.cover_url;
+      img.alt = series.title;
+      img.loading = "lazy";
+      img.onerror = function(){
+        this.style.display = "none";
+        coverEl.classList.add(bg);
+      };
+      coverEl.insertBefore(img, coverEl.firstChild);
+      if(existing) existing.textContent = series.title;
+    } else {
+      coverEl.className = "big-cover " + bg;
+      const sp = coverEl.querySelector("span");
+      if(sp) sp.textContent = series.title;
+    }
   }
   document.title = series.title + " - MikoReads";
 

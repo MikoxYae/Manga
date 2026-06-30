@@ -4,11 +4,24 @@ from bson import ObjectId
 
 series_bp = Blueprint("series", __name__)
 
+_COVER_FIELDS = ["cover_url", "cover_image", "coverImage", "image_url", "image", "thumbnail", "poster"]
+
+
+def _pick_cover(doc):
+    for field in _COVER_FIELDS:
+        val = doc.get(field)
+        if val and isinstance(val, str) and val.strip():
+            return val.strip()
+    return ""
+
+
 def fmt(doc):
     if not doc:
         return None
     doc["id"] = str(doc.pop("_id"))
+    doc["cover_url"] = _pick_cover(doc)
     return doc
+
 
 @series_bp.route("/", methods=["GET"])
 def list_series():
@@ -38,6 +51,7 @@ def list_series():
 
     return jsonify({"items": items, "total": total, "page": page, "limit": limit})
 
+
 @series_bp.route("/trending", methods=["GET"])
 def trending():
     db = get_db()
@@ -47,6 +61,7 @@ def trending():
     if type_filter: query["type"] = type_filter
     cursor = db.series.find(query).sort([("views", -1)]).limit(limit)
     return jsonify([fmt(doc) for doc in cursor])
+
 
 @series_bp.route("/latest-updated", methods=["GET"])
 def latest_updated():
@@ -75,6 +90,7 @@ def latest_updated():
     items = [fmt(doc) for doc in db.series.aggregate(pipeline)]
     return jsonify(items)
 
+
 @series_bp.route("/ranking", methods=["GET"])
 def ranking():
     db = get_db()
@@ -89,6 +105,7 @@ def ranking():
     cursor = db.series.find().sort(sort).limit(limit)
     return jsonify([fmt(doc) for doc in cursor])
 
+
 @series_bp.route("/<series_id>", methods=["GET"])
 def get_series(series_id):
     db = get_db()
@@ -99,6 +116,7 @@ def get_series(series_id):
     if not doc:
         return jsonify({"error": "Not found"}), 404
     return jsonify(fmt(doc))
+
 
 @series_bp.route("/", methods=["POST"])
 def create_series():
@@ -120,6 +138,7 @@ def create_series():
         "artist":        data.get("artist", ""),
         "alt_title":     data.get("alt_title", ""),
         "description":   data.get("description", ""),
+        "cover_url":     data.get("cover_url", ""),
         "cover_color":   data.get("cover_color", "manga"),
         "chapter_count": int(data.get("chapter_count", 0)),
         "updated_at":    datetime.datetime.utcnow(),
@@ -128,6 +147,7 @@ def create_series():
     doc["id"] = str(result.inserted_id)
     doc.pop("_id", None)
     return jsonify(doc), 201
+
 
 @series_bp.route("/<series_id>", methods=["PUT"])
 def update_series(series_id):
@@ -143,6 +163,7 @@ def update_series(series_id):
     if res.matched_count == 0:
         return jsonify({"error": "Not found"}), 404
     return jsonify({"updated": True})
+
 
 @series_bp.route("/<series_id>", methods=["DELETE"])
 def delete_series(series_id):
