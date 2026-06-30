@@ -1,31 +1,58 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Login - MikoReads</title><link rel="stylesheet" href="assets/style.css"></head><body>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login - MikoReads</title>
+<link rel="stylesheet" href="assets/style.css">
+</head><body>
 <header class="topbar">
   <a class="brand" href="index.html">
     <span class="brand-mark">M</span>
     <span><strong>MikoReads</strong><small>Manga and Manhwa</small></span>
   </a>
-  <nav class="nav"><a href="index.html" class="active">Home</a>
-<a href="browse.html" class="">Browse</a>
-<a href="latest.html" class="">Latest</a>
-<a href="ranking.html" class="">Ranking</a>
-<a href="admin.html" class="">Admin</a></nav>
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="browse.html">Browse</a>
+    <a href="latest.html">Latest</a>
+    <a href="ranking.html">Ranking</a>
+    <a href="admin.html">Admin</a>
+  </nav>
   <div class="actions">
     <a class="login-link" href="login.html">Login</a>
     <button class="menu-btn" id="menuBtn">Menu</button>
   </div>
 </header>
+
 <main class="auth-wrap">
   <section class="auth-card">
     <span class="eyebrow">Member area</span>
-    <h1>Login</h1>
-    <p class="sub">Frontend login mockup for bookmark, history and admin access later.</p>
-    <label>Email<input placeholder="you@example.com"></label>
-    <label>Password<input type="password" placeholder="Password"></label>
-    <button class="primary" type="button">Login</button>
-    <p class="sub" style="margin-top:16px">Demo only. Backend auth not connected yet.</p>
+    <h1>Welcome back</h1>
+    <p class="sub">Login to access your bookmarks, reading history and personalized updates. Frontend mockup only.</p>
+
+    <label>Email address<input type="email" placeholder="you@example.com"></label>
+    <label>Password<input type="password" placeholder="Enter your password"></label>
+
+    <div style="display:flex;justify-content:flex-end;margin-top:6px">
+      <a class="small-link" href="#">Forgot password?</a>
+    </div>
+
+    <button class="primary" type="button" style="width:100%;margin-top:8px">Login to account</button>
+
+    <div class="auth-divider">or continue with</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <button class="secondary" type="button">Google</button>
+      <button class="secondary" type="button">Discord</button>
+    </div>
+
+    <div class="auth-footer">
+      New to MikoReads? <a href="#">Create account</a>
+    </div>
+
+    <p class="sub" style="margin-top:18px;text-align:center;font-size:12px">
+      This is a frontend demo. Authentication backend is not connected.
+    </p>
   </section>
 </main>
+
 <script src="assets/app.js"></script>
 </body></html>
