@@ -1,65 +1,228 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Admin - MikoReads</title><link rel="stylesheet" href="assets/style.css"></head><body>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin - MikoReads</title>
+<link rel="stylesheet" href="assets/style.css">
+</head><body>
 <header class="topbar">
   <a class="brand" href="index.html">
     <span class="brand-mark">M</span>
     <span><strong>MikoReads</strong><small>Manga and Manhwa</small></span>
   </a>
-  <nav class="nav"><a href="index.html" class="">Home</a>
-<a href="browse.html" class="">Browse</a>
-<a href="latest.html" class="">Latest</a>
-<a href="ranking.html" class="">Ranking</a>
-<a href="admin.html" class="active">Admin</a></nav>
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="browse.html">Browse</a>
+    <a href="latest.html">Latest</a>
+    <a href="ranking.html">Ranking</a>
+    <a href="admin.html" class="active">Admin</a>
+  </nav>
   <div class="actions">
     <a class="login-link" href="login.html">Login</a>
     <button class="menu-btn" id="menuBtn">Menu</button>
   </div>
 </header>
+
 <main class="wrap">
-  <section class="admin-layout">
+  <div class="admin-layout">
     <aside class="admin-sidebar">
-      <h2>Admin</h2>
-      <a class="active">Dashboard</a>
-      <a>Add Series</a>
-      <a>Add Chapter</a>
-      <a>Sources</a>
-      <a>Reports</a>
-      <a>Settings</a>
+      <h2>Admin panel</h2>
+      <a class="active" data-section="sec-dashboard">
+        <span class="nav-icon">D</span> Dashboard
+      </a>
+      <a data-section="sec-add">
+        <span class="nav-icon">+</span> Add series
+      </a>
+      <a data-section="sec-chapters">
+        <span class="nav-icon">C</span> Add chapter
+      </a>
+      <a data-section="sec-sources">
+        <span class="nav-icon">S</span> Sources
+      </a>
+      <a data-section="sec-reports">
+        <span class="nav-icon">R</span> Reports
+      </a>
+      <a href="index.html" style="margin-top:16px;border-top:1px solid var(--line);padding-top:16px">
+        <span class="nav-icon">H</span> Back to site
+      </a>
     </aside>
+
     <section>
-      <div class="admin-grid">
-        <div class="admin-stat"><b>1,240</b><span>Series</span></div>
-        <div class="admin-stat"><b>12,860</b><span>Chapters</span></div>
-        <div class="admin-stat"><b>18</b><span>Sources</span></div>
-        <div class="admin-stat"><b>Clean</b><span>Filter mode</span></div>
+      <!-- Dashboard -->
+      <div class="admin-section" id="sec-dashboard">
+        <div class="admin-grid">
+          <div class="admin-stat">
+            <b>1,240</b>
+            <span>Total series</span>
+            <div class="trend">+14 this week</div>
+          </div>
+          <div class="admin-stat">
+            <b>12,860</b>
+            <span>Total chapters</span>
+            <div class="trend">+120 this week</div>
+          </div>
+          <div class="admin-stat">
+            <b>18</b>
+            <span>Active sources</span>
+            <div class="trend">3 paused</div>
+          </div>
+          <div class="admin-stat">
+            <b>Clean</b>
+            <span>Content filter</span>
+            <div class="trend">Mode active</div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <span class="eyebrow">Activity</span>
+          <h2 style="margin:8px 0 16px;font-size:22px;letter-spacing:-.04em">Recent updates</h2>
+          <div style="display:grid;gap:10px">
+            <div class="source-row">
+              <div class="source-info"><b>Solo Leveling Chapter 201</b><span>Added 2 hours ago</span></div>
+              <span class="status">Published</span>
+              <button class="secondary" type="button">Edit</button>
+            </div>
+            <div class="source-row">
+              <div class="source-info"><b>One Piece Chapter 1124</b><span>Added 1 day ago</span></div>
+              <span class="status">Published</span>
+              <button class="secondary" type="button">Edit</button>
+            </div>
+            <div class="source-row">
+              <div class="source-info"><b>Blue Lock Chapter 278</b><span>Added 1 day ago</span></div>
+              <span class="status">Published</span>
+              <button class="secondary" type="button">Edit</button>
+            </div>
+            <div class="source-row">
+              <div class="source-info"><b>Tower of God Chapter 642</b><span>Added 4 hours ago</span></div>
+              <span class="status off">Draft</span>
+              <button class="secondary" type="button">Edit</button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="admin-card">
-        <span class="eyebrow">Add content</span>
-        <h1>Add manga or manhwa</h1>
-        <p class="sub">Frontend admin mockup. Backend database and collector will connect in next phase.</p>
-        <form class="form-grid">
-          <label>Title<input placeholder="Example: Solo Leveling"></label>
-          <label>Type<select><option>Manga</option><option>Manhwa</option><option>Manhua</option><option>Webtoon</option></select></label>
-          <label>Status<select><option>Ongoing</option><option>Completed</option></select></label>
-          <label>Genres<input placeholder="Action, Fantasy, Adventure"></label>
-          <label class="full">Source URL<input placeholder="https://example.com/series-name"></label>
-          <label class="full">Description<textarea placeholder="Short description"></textarea></label>
-          <button class="primary full" type="button">Save Series</button>
-        </form>
+      <!-- Add series -->
+      <div class="admin-section" id="sec-add" style="display:none">
+        <div class="admin-card">
+          <span class="eyebrow">Add content</span>
+          <h1 style="font-size:28px;letter-spacing:-.04em;margin:8px 0 6px">Add manga or manhwa</h1>
+          <p class="sub" style="margin-bottom:22px">Frontend admin mockup. Database and collector connect in a future backend phase.</p>
+          <form class="form-grid">
+            <label>Title<input placeholder="Example: Solo Leveling"></label>
+            <label>Type
+              <select>
+                <option>Manga</option>
+                <option>Manhwa</option>
+                <option>Manhua</option>
+                <option>Webtoon</option>
+              </select>
+            </label>
+            <label>Status
+              <select>
+                <option>Ongoing</option>
+                <option>Completed</option>
+                <option>Hiatus</option>
+              </select>
+            </label>
+            <label>Author<input placeholder="Author name"></label>
+            <label>Artist<input placeholder="Artist name"></label>
+            <label>Genres<input placeholder="Action, Fantasy, Adventure"></label>
+            <label class="full">Source URL<input placeholder="https://example.com/series-name"></label>
+            <label class="full">Cover image URL<input placeholder="https://example.com/cover.jpg"></label>
+            <label class="full">Description<textarea placeholder="Short description of the series..."></textarea></label>
+            <div class="full" style="display:flex;gap:12px;justify-content:flex-end">
+              <button class="secondary" type="button">Save as draft</button>
+              <button class="primary" type="button">Publish series</button>
+            </div>
+          </form>
+        </div>
       </div>
 
-      <div class="admin-card" style="margin-top:20px">
-        <span class="eyebrow">Sources</span>
-        <h2>Collector sources mockup</h2>
-        <div class="source-row"><b>Manga Source 01</b><span class="status">Enabled</span><button class="secondary">Edit</button></div>
-        <div class="source-row"><b>Manhwa Source 01</b><span class="status">Enabled</span><button class="secondary">Edit</button></div>
-        <div class="source-row"><b>Manhua Source 01</b><span class="status off">Paused</span><button class="secondary">Edit</button></div>
+      <!-- Add chapter -->
+      <div class="admin-section" id="sec-chapters" style="display:none">
+        <div class="admin-card">
+          <span class="eyebrow">Chapters</span>
+          <h1 style="font-size:28px;letter-spacing:-.04em;margin:8px 0 6px">Add chapter</h1>
+          <p class="sub" style="margin-bottom:22px">Attach a new chapter to an existing series. Frontend mockup only.</p>
+          <form class="form-grid">
+            <label class="full">Series
+              <select>
+                <option>Solo Leveling</option>
+                <option>One Piece</option>
+                <option>Omniscient Reader</option>
+                <option>Blue Lock</option>
+              </select>
+            </label>
+            <label>Chapter number<input placeholder="202" type="number"></label>
+            <label>Chapter title<input placeholder="Optional title"></label>
+            <label class="full">Chapter URL or source<input placeholder="https://example.com/chapter-url"></label>
+            <div class="full" style="display:flex;gap:12px;justify-content:flex-end">
+              <button class="primary" type="button">Add chapter</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Sources -->
+      <div class="admin-section" id="sec-sources" style="display:none">
+        <div class="admin-card">
+          <span class="eyebrow">Sources</span>
+          <h2 style="margin:8px 0 18px;font-size:22px;letter-spacing:-.04em">Collector sources</h2>
+          <div class="source-row">
+            <div class="source-info"><b>Manga Source 01</b><span>manga.example.com · Auto-fetch daily</span></div>
+            <span class="status">Enabled</span>
+            <button class="secondary" type="button">Edit</button>
+          </div>
+          <div class="source-row">
+            <div class="source-info"><b>Manhwa Source 01</b><span>manhwa.example.com · Auto-fetch daily</span></div>
+            <span class="status">Enabled</span>
+            <button class="secondary" type="button">Edit</button>
+          </div>
+          <div class="source-row">
+            <div class="source-info"><b>Manhua Source 01</b><span>manhua.example.com · Paused</span></div>
+            <span class="status off">Paused</span>
+            <button class="secondary" type="button">Edit</button>
+          </div>
+          <div class="source-row">
+            <div class="source-info"><b>Webtoon Source 01</b><span>webtoon.example.com · Auto-fetch weekly</span></div>
+            <span class="status">Enabled</span>
+            <button class="secondary" type="button">Edit</button>
+          </div>
+          <div style="margin-top:18px">
+            <button class="primary" type="button">Add new source</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reports -->
+      <div class="admin-section" id="sec-reports" style="display:none">
+        <div class="admin-card">
+          <span class="eyebrow">Reports</span>
+          <h2 style="margin:8px 0 18px;font-size:22px;letter-spacing:-.04em">User reports</h2>
+          <div class="source-row">
+            <div class="source-info"><b>Wrong chapter content</b><span>Solo Leveling Chapter 198 · Reported 1 day ago</span></div>
+            <span class="status off">Open</span>
+            <button class="secondary" type="button">Review</button>
+          </div>
+          <div class="source-row">
+            <div class="source-info"><b>Missing pages</b><span>Blue Lock Chapter 275 · Reported 3 days ago</span></div>
+            <span class="status">Resolved</span>
+            <button class="secondary" type="button">View</button>
+          </div>
+          <div class="source-row">
+            <div class="source-info"><b>Wrong cover image</b><span>Tower of God · Reported 5 days ago</span></div>
+            <span class="status off">Open</span>
+            <button class="secondary" type="button">Review</button>
+          </div>
+          <p class="sub" style="margin-top:16px">3 open reports. Backend connection required for real report management.</p>
+        </div>
       </div>
     </section>
-  </section>
+  </div>
 </main>
-<footer class="footer"><strong>MikoReads</strong><span>Clean manga, manhwa, manhua and webtoon UI prototype.</span></footer>
+
+<footer class="footer">
+  <strong>MikoReads</strong>
+  <span>Premium manga, manhwa, manhua and webtoon reading experience.</span>
+</footer>
 <script src="assets/app.js"></script>
 </body></html>
