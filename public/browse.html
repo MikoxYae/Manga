@@ -1,53 +1,106 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Browse - MikoReads</title><link rel="stylesheet" href="assets/style.css"></head><body>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Browse - MikoReads</title>
+<meta name="description" content="Browse the full manga, manhwa, manhua and webtoon library. Filter by type, status and genre.">
+<link rel="stylesheet" href="assets/style.css">
+</head><body>
 <header class="topbar">
   <a class="brand" href="index.html">
     <span class="brand-mark">M</span>
     <span><strong>MikoReads</strong><small>Manga and Manhwa</small></span>
   </a>
-  <nav class="nav"><a href="index.html" class="">Home</a>
-<a href="browse.html" class="active">Browse</a>
-<a href="latest.html" class="">Latest</a>
-<a href="ranking.html" class="">Ranking</a>
-<a href="admin.html" class="">Admin</a></nav>
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="browse.html" class="active">Browse</a>
+    <a href="latest.html">Latest</a>
+    <a href="ranking.html">Ranking</a>
+    <a href="admin.html">Admin</a>
+  </nav>
   <div class="actions">
     <a class="login-link" href="login.html">Login</a>
     <button class="menu-btn" id="menuBtn">Menu</button>
   </div>
 </header>
+
 <main class="wrap">
   <section class="page-title">
     <span class="eyebrow">Library</span>
     <h1>Browse series</h1>
-    <p>Filter by type, status and search keywords. This is a frontend demo, ready for backend connection later.</p>
+    <p>Filter by type, status, genre and sort to find your next read. All results are demo data for this frontend prototype.</p>
   </section>
+
   <section class="browse-layout">
     <aside class="filter-panel">
       <h3>Filters</h3>
-      <label>Search</label>
-      <input id="browseSearch" placeholder="Title, genre, type">
-      <label>Type</label>
-      <select id="typeFilter">
-        <option value="all">All</option><option>Manga</option><option>Manhwa</option><option>Manhua</option><option>Webtoon</option>
-      </select>
+
+      <label>Search title or genre</label>
+      <input id="browseSearch" type="search" placeholder="Solo Leveling, action...">
+
+      <label>Content type</label>
+      <div class="type-filter-row">
+        <button class="type-filter-btn active" data-value="all">All</button>
+        <button class="type-filter-btn" data-value="Manga">Manga</button>
+        <button class="type-filter-btn" data-value="Manhwa">Manhwa</button>
+        <button class="type-filter-btn" data-value="Manhua">Manhua</button>
+      </div>
+      <div style="margin-top:7px">
+        <button class="type-filter-btn" data-value="Webtoon" style="width:100%">Webtoon</button>
+      </div>
+      <input type="hidden" id="typeFilter" value="all">
+
       <label>Status</label>
       <select id="statusFilter">
-        <option value="all">All</option><option>Ongoing</option><option>Completed</option>
+        <option value="all">All Status</option>
+        <option value="Ongoing">Ongoing</option>
+        <option value="Completed">Completed</option>
       </select>
-      <label>Sort</label>
-      <select><option>Latest Update</option><option>Most Popular</option><option>Rating</option><option>A to Z</option></select>
-      <button class="primary" id="clearFilters" type="button" style="width:100%;margin-top:18px">Clear Filters</button>
+
+      <label>Sort by</label>
+      <select id="sortFilter">
+        <option value="latest">Latest Update</option>
+        <option value="rating">Highest Rating</option>
+        <option value="az">A to Z</option>
+      </select>
+
+      <button class="primary" id="clearFilters" type="button" style="width:100%;margin-top:20px">Clear all filters</button>
     </aside>
+
     <div>
-      <div class="filter-row" style="margin-bottom:18px">
-        <button class="active">All</button><button>Action</button><button>Fantasy</button><button>Comedy</button><button>Martial Arts</button><button>Romance</button>
+      <div class="filter-row" style="margin-bottom:14px">
+        <button class="active">All genres</button>
+        <button>Action</button>
+        <button>Fantasy</button>
+        <button>Comedy</button>
+        <button>Martial Arts</button>
+        <button>Romance</button>
+        <button>Adventure</button>
       </div>
+
+      <div class="browse-toolbar">
+        <span class="result-count" id="resultCount">16 series</span>
+        <select class="sort-select" id="sortDisplay">
+          <option>Latest Update</option>
+          <option>Highest Rated</option>
+          <option>A to Z</option>
+        </select>
+      </div>
+
       <div class="series-grid" id="browseGrid"></div>
-      <div class="pagination"><a>1</a><a>2</a><a>3</a><a>Next</a></div>
+      <div class="pagination">
+        <a class="active-page">1</a>
+        <a>2</a>
+        <a>3</a>
+        <a>4</a>
+        <a>Next</a>
+      </div>
     </div>
   </section>
 </main>
-<footer class="footer"><strong>MikoReads</strong><span>Clean manga, manhwa, manhua and webtoon UI prototype.</span></footer>
+
+<footer class="footer">
+  <strong>MikoReads</strong>
+  <span>Premium manga, manhwa, manhua and webtoon reading experience.</span>
+</footer>
 <script src="assets/app.js"></script>
 </body></html>
