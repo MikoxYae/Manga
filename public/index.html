@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MikoReads - Manga and Manhwa Reader</title>
+<meta name="description" content="Clean manga, manhwa, manhua and webtoon reader UI prototype.">
+<link rel="stylesheet" href="assets/style.css">
+</head><body>
+<header class="topbar">
+  <a class="brand" href="index.html">
+    <span class="brand-mark">M</span>
+    <span><strong>MikoReads</strong><small>Manga and Manhwa</small></span>
+  </a>
+  <nav class="nav"><a href="index.html" class="active">Home</a>
+<a href="browse.html" class="">Browse</a>
+<a href="latest.html" class="">Latest</a>
+<a href="ranking.html" class="">Ranking</a>
+<a href="admin.html" class="">Admin</a></nav>
+  <div class="actions">
+    <a class="login-link" href="login.html">Login</a>
+    <button class="menu-btn" id="menuBtn">Menu</button>
+  </div>
+</header>
+<main>
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Clean manga and manhwa hub</span>
+      <h1>Fast reader for manga, manhwa, manhua and webtoons.</h1>
+      <p>Premium style website UI with clean catalog, latest updates, ranking, advanced browse filters, reader page and admin mockup. Adult content section is not included.</p>
+      <form class="search-shell" id="searchForm">
+        <input id="searchInput" type="search" placeholder="Search Solo Leveling, One Piece, action, manhwa">
+        <button class="primary" type="submit">Search</button>
+      </form>
+      <div class="hero-actions">
+        <a class="primary" href="browse.html">Browse Library</a>
+        <a class="secondary" href="reader.html">Open Reader</a>
+      </div>
+      <div class="hero-stats">
+        <div><b>1.2K</b><span>Series</span></div>
+        <div><b>12.8K</b><span>Chapters</span></div>
+        <div><b>4</b><span>Content Types</span></div>
+        <div><b>Clean</b><span>Mode</span></div>
+      </div>
+    </div>
+    <aside class="showcase">
+      <div class="floating-list">
+        <div class="float-item"><b>Latest Update</b><span>Solo Leveling Chapter 201</span></div>
+        <div class="float-item"><b>Top Genre</b><span>Action and Fantasy</span></div>
+        <div class="float-item"><b>Reader</b><span>Vertical scroll mode</span></div>
+      </div>
+      <div class="featured-card">
+        <div class="featured-content">
+          <div class="badges"><span class="badge clean">Clean</span><span class="badge">Manhwa</span><span class="badge">Trending</span></div>
+          <h2>Solo Leveling</h2>
+          <p>Clean catalog page style with cover, chapters, status, author, artist and fast reader button.</p>
+          <a class="primary" href="detail.html">View Details</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="section" id="popular">
+  <div class="wrap">
+    <div class="section-head">
+      <div><span class="eyebrow">Most read</span><h2>Trending library</h2></div>
+      <div class="tabs" id="typeTabs">
+        <button class="active" data-filter="all">All</button>
+        <button data-filter="Manga">Manga</button>
+        <button data-filter="Manhwa">Manhwa</button>
+        <button data-filter="Manhua">Manhua</button>
+        <button data-filter="Webtoon">Webtoon</button>
+      </div>
+    </div>
+    <div class="cards" id="mangaGrid"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap twocol">
+    <div class="content-card">
+      <div class="section-head"><div><span class="eyebrow">Fresh chapters</span><h2>Latest updates</h2></div><a class="pill" href="latest.html">View all</a></div>
+      <div class="feed" id="chapterFeed"></div>
+    </div>
+    <aside class="sidebar-card">
+      <span class="eyebrow">Weekly</span><h2>Ranking</h2>
+      <ol class="ranking">
+        <li><a href="detail.html"><span>01</span><b>Solo Leveling</b><small>Manhwa</small></a></li>
+        <li><a href="detail.html"><span>02</span><b>One Piece</b><small>Manga</small></a></li>
+        <li><a href="detail.html"><span>03</span><b>Omniscient Reader</b><small>Manhwa</small></a></li>
+        <li><a href="detail.html"><span>04</span><b>Magic Emperor</b><small>Manhua</small></a></li>
+        <li><a href="detail.html"><span>05</span><b>Blue Lock</b><small>Manga</small></a></li>
+      </ol>
+    </aside>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap content-card">
+    <div class="section-head"><div><span class="eyebrow">Browse</span><h2>Genres</h2></div></div>
+    <div class="genre-cloud">
+      <a href="browse.html">Action</a><a href="browse.html">Adventure</a><a href="browse.html">Fantasy</a><a href="browse.html">Romance</a>
+      <a href="browse.html">Comedy</a><a href="browse.html">Drama</a><a href="browse.html">School Life</a><a href="browse.html">Slice of Life</a>
+      <a href="browse.html">Martial Arts</a><a href="browse.html">Isekai</a><a href="browse.html">Mystery</a><a href="browse.html">Sci-fi</a>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="footer"><strong>MikoReads</strong><span>Clean manga, manhwa, manhua and webtoon UI prototype.</span></footer>
+<script src="assets/app.js"></script>
+</body></html>

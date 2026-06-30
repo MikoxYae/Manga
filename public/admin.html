@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin - MikoReads</title><link rel="stylesheet" href="assets/style.css"></head><body>
+<header class="topbar">
+  <a class="brand" href="index.html">
+    <span class="brand-mark">M</span>
+    <span><strong>MikoReads</strong><small>Manga and Manhwa</small></span>
+  </a>
+  <nav class="nav"><a href="index.html" class="">Home</a>
+<a href="browse.html" class="">Browse</a>
+<a href="latest.html" class="">Latest</a>
+<a href="ranking.html" class="">Ranking</a>
+<a href="admin.html" class="active">Admin</a></nav>
+  <div class="actions">
+    <a class="login-link" href="login.html">Login</a>
+    <button class="menu-btn" id="menuBtn">Menu</button>
+  </div>
+</header>
+<main class="wrap">
+  <section class="admin-layout">
+    <aside class="admin-sidebar">
+      <h2>Admin</h2>
+      <a class="active">Dashboard</a>
+      <a>Add Series</a>
+      <a>Add Chapter</a>
+      <a>Sources</a>
+      <a>Reports</a>
+      <a>Settings</a>
+    </aside>
+    <section>
+      <div class="admin-grid">
+        <div class="admin-stat"><b>1,240</b><span>Series</span></div>
+        <div class="admin-stat"><b>12,860</b><span>Chapters</span></div>
+        <div class="admin-stat"><b>18</b><span>Sources</span></div>
+        <div class="admin-stat"><b>Clean</b><span>Filter mode</span></div>
+      </div>
+
+      <div class="admin-card">
+        <span class="eyebrow">Add content</span>
+        <h1>Add manga or manhwa</h1>
+        <p class="sub">Frontend admin mockup. Backend database and collector will connect in next phase.</p>
+        <form class="form-grid">
+          <label>Title<input placeholder="Example: Solo Leveling"></label>
+          <label>Type<select><option>Manga</option><option>Manhwa</option><option>Manhua</option><option>Webtoon</option></select></label>
+          <label>Status<select><option>Ongoing</option><option>Completed</option></select></label>
+          <label>Genres<input placeholder="Action, Fantasy, Adventure"></label>
+          <label class="full">Source URL<input placeholder="https://example.com/series-name"></label>
+          <label class="full">Description<textarea placeholder="Short description"></textarea></label>
+          <button class="primary full" type="button">Save Series</button>
+        </form>
+      </div>
+
+      <div class="admin-card" style="margin-top:20px">
+        <span class="eyebrow">Sources</span>
+        <h2>Collector sources mockup</h2>
+        <div class="source-row"><b>Manga Source 01</b><span class="status">Enabled</span><button class="secondary">Edit</button></div>
+        <div class="source-row"><b>Manhwa Source 01</b><span class="status">Enabled</span><button class="secondary">Edit</button></div>
+        <div class="source-row"><b>Manhua Source 01</b><span class="status off">Paused</span><button class="secondary">Edit</button></div>
+      </div>
+    </section>
+  </section>
+</main>
+<footer class="footer"><strong>MikoReads</strong><span>Clean manga, manhwa, manhua and webtoon UI prototype.</span></footer>
+<script src="assets/app.js"></script>
+</body></html>
