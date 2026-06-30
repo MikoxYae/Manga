@@ -1,52 +1,29 @@
-const series = [
-  {title:"Solo Leveling",type:"Manhwa",chapter:"Chapter 201",rating:"9.6",genres:"Action, Fantasy",status:"Completed",views:"2.4M",updated:"2h ago"},
-  {title:"One Piece",type:"Manga",chapter:"Chapter 1124",rating:"9.8",genres:"Adventure, Comedy",status:"Ongoing",views:"5.1M",updated:"1d ago"},
-  {title:"Omniscient Reader",type:"Manhwa",chapter:"Chapter 220",rating:"9.4",genres:"Action, Fantasy",status:"Ongoing",views:"1.8M",updated:"3h ago"},
-  {title:"Magic Emperor",type:"Manhua",chapter:"Chapter 610",rating:"9.1",genres:"Martial Arts",status:"Ongoing",views:"1.2M",updated:"5h ago"},
-  {title:"Blue Lock",type:"Manga",chapter:"Chapter 278",rating:"9.0",genres:"Sports, Drama",status:"Ongoing",views:"980K",updated:"1d ago"},
-  {title:"The Beginning After The End",type:"Webtoon",chapter:"Chapter 189",rating:"9.3",genres:"Fantasy, Adventure",status:"Ongoing",views:"1.5M",updated:"2d ago"},
-  {title:"Tower of God",type:"Manhwa",chapter:"Chapter 642",rating:"9.2",genres:"Adventure",status:"Ongoing",views:"1.1M",updated:"4h ago"},
-  {title:"Spy x Family",type:"Manga",chapter:"Chapter 104",rating:"9.0",genres:"Comedy, Action",status:"Ongoing",views:"860K",updated:"6h ago"},
-  {title:"Eleceed",type:"Manhwa",chapter:"Chapter 312",rating:"9.1",genres:"Action, Comedy",status:"Ongoing",views:"720K",updated:"8h ago"},
-  {title:"Martial Peak",type:"Manhua",chapter:"Chapter 3780",rating:"8.7",genres:"Martial Arts",status:"Ongoing",views:"950K",updated:"12h ago"},
-  {title:"Jujutsu Kaisen",type:"Manga",chapter:"Chapter 271",rating:"9.5",genres:"Action, Supernatural",status:"Completed",views:"3.2M",updated:"2d ago"},
-  {title:"Return of the Mount Hua Sect",type:"Manhwa",chapter:"Chapter 132",rating:"9.2",genres:"Martial Arts",status:"Ongoing",views:"680K",updated:"1d ago"},
-  {title:"Chainsaw Man",type:"Manga",chapter:"Chapter 178",rating:"9.1",genres:"Action, Supernatural",status:"Ongoing",views:"2.1M",updated:"3d ago"},
-  {title:"Nano Machine",type:"Manhwa",chapter:"Chapter 226",rating:"9.0",genres:"Martial Arts, Action",status:"Ongoing",views:"590K",updated:"1d ago"},
-  {title:"Pick Me Up",type:"Manhwa",chapter:"Chapter 115",rating:"8.9",genres:"Fantasy, Action",status:"Ongoing",views:"430K",updated:"2d ago"},
-  {title:"Kingdom",type:"Manga",chapter:"Chapter 814",rating:"9.4",genres:"War, Historical",status:"Ongoing",views:"1.4M",updated:"4d ago"}
-];
+const API = "";
 
 const coverClass = {
-  "Manga":"manga-bg",
-  "Manhwa":"manhwa-bg",
-  "Manhua":"manhua-bg",
-  "Webtoon":"webtoon-bg"
+  "Manga":"manga-bg","Manhwa":"manhwa-bg","Manhua":"manhua-bg","Webtoon":"webtoon-bg"
 };
-
 const badgeClass = {
-  "Manga":"type-manga",
-  "Manhwa":"type-manhwa",
-  "Manhua":"type-manhua",
-  "Webtoon":"type-webtoon"
+  "Manga":"type-manga","Manhwa":"type-manhwa","Manhua":"type-manhua","Webtoon":"type-webtoon"
 };
 
 function card(item){
   const bg = coverClass[item.type] || "manga-bg";
   const bc = badgeClass[item.type] || "";
-  return `<a class="manga-card" href="detail.html" data-type="${item.type}" data-title="${item.title.toLowerCase()}" data-status="${item.status}">
+  const ch = item.latest_chapter || ("Ch. " + (item.chapter_count || "?"));
+  return `<a class="manga-card" href="detail.html?id=${item.id}" data-type="${item.type}">
     <div class="cover ${bg}">
       <span class="cover-badge">${item.type}</span>
       <span class="cover-title">${item.title}</span>
     </div>
     <div class="manga-body">
       <h3>${item.title}</h3>
-      <p>${item.genres}</p>
+      <p>${(item.genres||[]).join(", ")}</p>
       <div class="card-meta">
         <span class="badge ${bc}">${item.type}</span>
-        <span class="rating">${item.rating}</span>
+        <span class="rating">${item.rating||""}</span>
       </div>
-      <div style="margin-top:6px"><span class="ch-label">${item.chapter}</span></div>
+      <div style="margin-top:6px"><span class="ch-label">${ch}</span></div>
     </div>
   </a>`;
 }
@@ -54,123 +31,212 @@ function card(item){
 function feedRow(item){
   const bg = coverClass[item.type] || "manga-bg";
   const bc = badgeClass[item.type] || "";
-  return `<a class="feed-item" href="reader.html">
+  return `<a class="feed-item" href="detail.html?id=${item.id}">
     <div class="feed-cover ${bg}">${item.title.substring(0,4)}</div>
     <div class="feed-info">
       <b>${item.title}</b>
-      <div class="sub"><span class="badge ${bc}" style="font-size:10px;padding:3px 7px">${item.type}</span> ${item.genres.split(",")[0]}</div>
+      <div class="sub"><span class="badge ${bc}" style="font-size:10px;padding:3px 7px">${item.type}</span> ${(item.genres||[])[0]||""}</div>
     </div>
     <div class="feed-badge">
-      <span class="feed-ch">${item.chapter}</span>
-      <span class="feed-time">${item.updated}</span>
+      <span class="feed-ch">${item.latest_chapter||""}</span>
+      <span class="feed-time">${item.updated_label||""}</span>
     </div>
   </a>`;
 }
 
-function renderHome(filter, query){
-  if(filter === undefined) filter = "all";
+function latestRow(item){
+  const bg = coverClass[item.type] || "manga-bg";
+  const bc = badgeClass[item.type] || "";
+  return `<a class="latest-item" href="detail.html?id=${item.id}">
+    <div class="latest-cover ${bg}">${item.series_title ? item.series_title.substring(0,6) : ""}</div>
+    <div class="latest-info">
+      <h4>${item.series_title||item.title||""}</h4>
+      <div class="sub"><span class="badge ${bc}" style="font-size:10px;padding:3px 7px">${item.type||""}</span></div>
+    </div>
+    <div class="latest-right">
+      <div class="latest-ch">${item.title||""}</div>
+      <span class="latest-time">${item.updated_label||""}</span>
+    </div>
+  </a>`;
+}
+
+function rankRow(item, i){
+  const bc = badgeClass[item.type] || "";
+  const rankClasses = ["gold","silver","bronze"];
+  const numClass = i < 3 ? rankClasses[i] : "";
+  return `<li class="ranking-item">
+    <a href="detail.html?id=${item.id}">
+      <div class="rank-num ${numClass}">${String(i+1).padStart(2,"0")}</div>
+      <div class="rank-info">
+        <b>${item.title}</b>
+        <small><span class="badge ${bc}" style="font-size:10px;padding:2px 7px">${item.type}</span></small>
+      </div>
+      <div class="rank-right">
+        <div class="rank-rating">${item.rating}</div>
+        <div class="rank-views">${fmtViews(item.views)}</div>
+      </div>
+    </a>
+  </li>`;
+}
+
+function fmtViews(n){
+  if(!n) return "";
+  if(n >= 1000000) return (n/1000000).toFixed(1)+"M views";
+  if(n >= 1000) return (n/1000).toFixed(0)+"K views";
+  return n+" views";
+}
+
+async function apiFetch(path){
+  try {
+    const res = await fetch(API + path);
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    return await res.json();
+  } catch(e){
+    console.warn("API error:", path, e.message);
+    return null;
+  }
+}
+
+async function renderHome(type, query){
+  if(type === undefined) type = "all";
   if(query === undefined) query = "";
+
   const grid = document.getElementById("mangaGrid");
   const feed = document.getElementById("chapterFeed");
+
   if(grid){
-    const q = query.trim().toLowerCase();
-    const items = series.filter(function(item){
-      const typeOk = filter === "all" || item.type === filter;
-      const searchOk = !q || (item.title + " " + item.type + " " + item.genres).toLowerCase().indexOf(q) !== -1;
-      return typeOk && searchOk;
-    });
-    grid.innerHTML = items.slice(0,12).map(card).join("") || '<p class="sub" style="grid-column:1/-1;padding:20px 0">No series found.</p>';
+    let url = "/api/series/trending?limit=12";
+    if(type && type !== "all") url += "&type=" + encodeURIComponent(type);
+    if(query) url = "/api/search/?q=" + encodeURIComponent(query) + "&limit=12";
+    const data = await apiFetch(url);
+    const items = data ? (data.items || data) : [];
+    grid.innerHTML = items.length
+      ? items.map(card).join("")
+      : '<p class="sub" style="grid-column:1/-1;padding:20px 0">No series found.</p>';
   }
-  if(feed) feed.innerHTML = series.slice(0,8).map(feedRow).join("");
+
+  if(feed){
+    const data = await apiFetch("/api/series/latest-updated?limit=8");
+    const items = data || [];
+    feed.innerHTML = items.map(feedRow).join("");
+  }
 }
 
-function renderBrowse(){
+async function renderBrowse(){
   const list = document.getElementById("browseGrid");
   if(!list) return;
-  const q = (document.getElementById("browseSearch") ? document.getElementById("browseSearch").value : "").toLowerCase();
-  const type = document.getElementById("typeFilter") ? document.getElementById("typeFilter").value : "all";
-  const status = document.getElementById("statusFilter") ? document.getElementById("statusFilter").value : "all";
-  const sort = document.getElementById("sortFilter") ? document.getElementById("sortFilter").value : "latest";
-  let items = series.filter(function(item){
-    const searchOk = !q || (item.title + " " + item.type + " " + item.genres).toLowerCase().indexOf(q) !== -1;
-    const typeOk = type === "all" || item.type === type;
-    const statusOk = status === "all" || item.status === status;
-    return searchOk && typeOk && statusOk;
-  });
-  if(sort === "rating") items = items.slice().sort(function(a,b){ return parseFloat(b.rating) - parseFloat(a.rating); });
-  if(sort === "az") items = items.slice().sort(function(a,b){ return a.title.localeCompare(b.title); });
-  list.innerHTML = items.map(card).join("") || '<p class="sub" style="grid-column:1/-1;padding:20px 0">No series found.</p>';
+  const q      = (document.getElementById("browseSearch") || {}).value || "";
+  const type   = (document.getElementById("typeFilter") || {}).value || "all";
+  const status = (document.getElementById("statusFilter") || {}).value || "all";
+  const sort   = (document.getElementById("sortFilter") || {}).value || "updated";
+
+  let url;
+  if(q){
+    url = "/api/search/?q=" + encodeURIComponent(q) + "&limit=24";
+  } else {
+    url = "/api/series/?limit=24&sort=" + sort;
+    if(type && type !== "all") url += "&type=" + encodeURIComponent(type);
+    if(status && status !== "all") url += "&status=" + encodeURIComponent(status);
+  }
+
+  const data = await apiFetch(url);
+  const items = data ? (data.items || data) : [];
+  list.innerHTML = items.length
+    ? items.map(card).join("")
+    : '<p class="sub" style="grid-column:1/-1;padding:20px 0">No series found.</p>';
   const count = document.getElementById("resultCount");
-  if(count) count.textContent = items.length + " series";
+  if(count) count.textContent = (data && data.total ? data.total : items.length) + " series";
 }
 
-function renderLatest(){
+async function renderLatest(){
   const feed = document.getElementById("latestFeed");
   if(!feed) return;
-  const recentSeries = series.slice();
-  feed.innerHTML = recentSeries.slice(0,14).map(function(item,i){
-    const bg = coverClass[item.type] || "manga-bg";
-    const bc = badgeClass[item.type] || "";
-    return `<a class="latest-item" href="reader.html">
-      <div class="latest-cover ${bg}">${item.title.substring(0,6)}</div>
-      <div class="latest-info">
-        <h4>${item.title}</h4>
-        <div class="sub">
-          <span class="badge ${bc}" style="font-size:10px;padding:3px 7px">${item.type}</span>
-          <span style="margin-left:6px">${item.genres.split(",")[0]}</span>
-        </div>
-      </div>
-      <div class="latest-right">
-        <div class="latest-ch">${item.chapter}</div>
-        <span class="latest-time">${item.updated}</span>
-      </div>
-    </a>`;
-  }).join("");
+  const data = await apiFetch("/api/chapters/latest?limit=14");
+  const items = data || [];
+  feed.innerHTML = items.map(latestRow).join("");
 }
 
-function renderRanking(period){
+async function renderRanking(period){
   if(!period) period = "weekly";
   const list = document.getElementById("rankList");
   if(!list) return;
-  let items = series.slice();
-  if(period === "monthly") items = series.slice().sort(function(a,b){ return parseFloat(b.rating) - parseFloat(a.rating); });
-  if(period === "alltime") items = series.slice().reverse();
-  const rankClasses = ["gold","silver","bronze"];
-  list.innerHTML = items.slice(0,12).map(function(item,i){
-    const bc = badgeClass[item.type] || "";
-    const numClass = i < 3 ? rankClasses[i] : "";
-    return `<li class="ranking-item">
-      <a href="detail.html">
-        <div class="rank-num ${numClass}">${String(i+1).padStart(2,"0")}</div>
-        <div class="rank-info">
-          <b>${item.title}</b>
-          <small>${item.type} <span class="badge ${bc}" style="font-size:10px;padding:2px 7px">${item.type}</span></small>
-        </div>
-        <div class="rank-right">
-          <div class="rank-rating">${item.rating}</div>
-          <div class="rank-views">${item.views} views</div>
-        </div>
-      </a>
-    </li>`;
-  }).join("");
+  const data = await apiFetch("/api/series/ranking?period=" + period + "&limit=12");
+  const items = data || [];
+  list.innerHTML = items.map(rankRow).join("");
 }
 
-/* Tab switching */
-document.querySelectorAll("[data-tab-group]").forEach(function(group){
-  const name = group.dataset.tabGroup;
-  group.querySelectorAll("[data-tab]").forEach(function(btn){
+async function renderDetail(){
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+  if(!id) return;
+
+  const series = await apiFetch("/api/series/" + id);
+  if(!series) return;
+
+  const titleEl = document.getElementById("seriesTitle");
+  const altEl   = document.getElementById("seriesAlt");
+  const descEl  = document.getElementById("seriesDesc");
+  const metaEls = {
+    status: document.getElementById("metaStatus"),
+    author: document.getElementById("metaAuthor"),
+    artist: document.getElementById("metaArtist"),
+    rating: document.getElementById("metaRating"),
+  };
+  const genreEl = document.getElementById("seriesGenres");
+  const coverEl = document.getElementById("seriesCover");
+
+  if(titleEl) titleEl.textContent = series.title;
+  if(altEl && series.alt_title) altEl.textContent = "Alternative title: " + series.alt_title;
+  if(descEl) descEl.textContent = series.description;
+  if(metaEls.status) metaEls.status.textContent = series.status;
+  if(metaEls.author) metaEls.author.textContent = series.author;
+  if(metaEls.artist) metaEls.artist.textContent = series.artist;
+  if(metaEls.rating) metaEls.rating.textContent = series.rating;
+  if(genreEl) genreEl.innerHTML = (series.genres||[]).map(g => `<span class="genre-tag">${g}</span>`).join("");
+  if(coverEl){
+    const bg = coverClass[series.type] || "manga-bg";
+    coverEl.className = "big-cover " + bg;
+    const sp = coverEl.querySelector("span");
+    if(sp) sp.textContent = series.title;
+  }
+  document.title = series.title + " - MikoReads";
+
+  const chData = await apiFetch("/api/chapters/series/" + id + "?limit=20");
+  const chList = document.getElementById("chapterList");
+  if(chList && chData){
+    const chs = chData.items || [];
+    chList.innerHTML = chs.map(ch =>
+      `<a href="reader.html?chapter=${ch.id}"><b>${ch.title}</b><span>${ch.updated_label||""}</span></a>`
+    ).join("");
+  }
+}
+
+function setupTypeFilterBtns(){
+  document.querySelectorAll(".type-filter-btn").forEach(function(btn){
     btn.addEventListener("click", function(){
-      document.querySelectorAll('[data-tab-group="'+name+'"] [data-tab]').forEach(function(b){ b.classList.remove("active"); });
+      document.querySelectorAll(".type-filter-btn").forEach(function(b){ b.classList.remove("active"); });
       btn.classList.add("active");
-      const target = btn.dataset.tab;
-      document.querySelectorAll('[data-panel-group="'+name+'"] [data-panel]').forEach(function(p){
-        p.style.display = p.dataset.panel === target ? "" : "none";
-      });
-      if(name === "home-type") renderHome(target, document.getElementById("searchInput") ? document.getElementById("searchInput").value : "");
-      if(name === "ranking") renderRanking(target);
+      var tf = document.getElementById("typeFilter");
+      if(tf){ tf.value = btn.dataset.value; renderBrowse(); }
     });
   });
-});
+}
+
+function setupGenreChips(){
+  document.querySelectorAll(".genre-chip[data-filter]").forEach(function(chip){
+    chip.addEventListener("click", function(){
+      document.querySelectorAll(".genre-chip[data-filter]").forEach(function(c){ c.classList.remove("active"); });
+      chip.classList.add("active");
+      var filterValue = chip.dataset.filter;
+      document.querySelectorAll("#typeTabs button").forEach(function(b){
+        b.classList.toggle("active", (filterValue === "all" && b.dataset.filter === "all") || b.dataset.filter === filterValue);
+      });
+      renderHome(filterValue, document.getElementById("searchInput") ? document.getElementById("searchInput").value : "");
+      var popular = document.getElementById("popular");
+      if(popular) popular.scrollIntoView({behavior:"smooth"});
+    });
+  });
+}
 
 document.querySelectorAll("#typeTabs button").forEach(function(btn){
   btn.addEventListener("click", function(){
@@ -184,16 +250,15 @@ var searchForm = document.getElementById("searchForm");
 if(searchForm){
   searchForm.addEventListener("submit", function(e){
     e.preventDefault();
-    var activeBtn = document.querySelector("#typeTabs button.active");
-    var filter = activeBtn ? activeBtn.dataset.filter : "all";
     var input = document.getElementById("searchInput");
-    renderHome(filter, input ? input.value : "");
+    var activeBtn = document.querySelector("#typeTabs button.active");
+    renderHome(activeBtn ? activeBtn.dataset.filter : "all", input ? input.value : "");
     var popular = document.getElementById("popular");
     if(popular) popular.scrollIntoView({behavior:"smooth"});
   });
 }
 
-["browseSearch","typeFilter","statusFilter","sortFilter"].forEach(function(id){
+["browseSearch","statusFilter","sortFilter"].forEach(function(id){
   var el = document.getElementById(id);
   if(el) el.addEventListener("input", renderBrowse);
 });
@@ -205,36 +270,11 @@ if(clearFilters){
       var el = document.getElementById(id);
       if(el) el.value = el.tagName === "SELECT" ? "all" : "";
     });
+    document.querySelectorAll(".type-filter-btn").forEach(function(b){ b.classList.toggle("active", b.dataset.value === "all"); });
     renderBrowse();
   });
 }
 
-/* Type filter buttons for browse */
-document.querySelectorAll(".type-filter-btn").forEach(function(btn){
-  btn.addEventListener("click", function(){
-    document.querySelectorAll(".type-filter-btn").forEach(function(b){ b.classList.remove("active"); });
-    btn.classList.add("active");
-    var tf = document.getElementById("typeFilter");
-    if(tf){ tf.value = btn.dataset.value; renderBrowse(); }
-  });
-});
-
-/* Genre chip quick filter */
-document.querySelectorAll(".genre-chip[data-filter]").forEach(function(chip){
-  chip.addEventListener("click", function(){
-    document.querySelectorAll(".genre-chip[data-filter]").forEach(function(c){ c.classList.remove("active"); });
-    chip.classList.add("active");
-    var filterValue = chip.dataset.filter;
-    document.querySelectorAll("#typeTabs button").forEach(function(b){
-      b.classList.toggle("active", (filterValue === "all" && b.dataset.filter === "all") || b.dataset.filter === filterValue);
-    });
-    renderHome(filterValue, document.getElementById("searchInput") ? document.getElementById("searchInput").value : "");
-    var popular = document.getElementById("popular");
-    if(popular) popular.scrollIntoView({behavior:"smooth"});
-  });
-});
-
-/* Mobile menu */
 var menuBtn = document.getElementById("menuBtn");
 if(menuBtn){
   menuBtn.addEventListener("click", function(){
@@ -243,7 +283,6 @@ if(menuBtn){
   });
 }
 
-/* Reader controls */
 var themeToggle = document.getElementById("themeToggle");
 if(themeToggle){
   themeToggle.addEventListener("click", function(){
@@ -276,36 +315,17 @@ if(wideBtn){
   });
 }
 
-/* Featured slider */
 var slides = document.querySelectorAll(".featured-slide");
-var dots = document.querySelectorAll(".slider-dot");
+var dots   = document.querySelectorAll(".slider-dot");
 var currentSlide = 0;
 function goToSlide(n){
-  slides.forEach(function(s,i){ s.classList.toggle("active", i === n); });
-  dots.forEach(function(d,i){ d.classList.toggle("active", i === n); });
+  slides.forEach(function(s,i){ s.classList.toggle("active", i===n); });
+  dots.forEach(function(d,i){ d.classList.toggle("active", i===n); });
   currentSlide = n;
 }
-dots.forEach(function(dot,i){
-  dot.addEventListener("click", function(){ goToSlide(i); });
-});
-if(slides.length > 1){
-  setInterval(function(){
-    goToSlide((currentSlide + 1) % slides.length);
-  }, 4500);
-}
+dots.forEach(function(dot,i){ dot.addEventListener("click", function(){ goToSlide(i); }); });
+if(slides.length > 1){ setInterval(function(){ goToSlide((currentSlide+1)%slides.length); }, 4500); }
 
-/* Admin sidebar tabs */
-document.querySelectorAll(".admin-sidebar a[data-section]").forEach(function(link){
-  link.addEventListener("click", function(){
-    document.querySelectorAll(".admin-sidebar a").forEach(function(a){ a.classList.remove("active"); });
-    link.classList.add("active");
-    document.querySelectorAll(".admin-section").forEach(function(s){ s.style.display = "none"; });
-    var sec = document.getElementById(link.dataset.section);
-    if(sec) sec.style.display = "";
-  });
-});
-
-/* Filter row pills (genre chips in browse) */
 document.querySelectorAll(".filter-row button").forEach(function(btn){
   btn.addEventListener("click", function(){
     document.querySelectorAll(".filter-row button").forEach(function(b){ b.classList.remove("active"); });
@@ -313,7 +333,21 @@ document.querySelectorAll(".filter-row button").forEach(function(btn){
   });
 });
 
+document.querySelectorAll(".admin-sidebar a[data-section]").forEach(function(link){
+  link.addEventListener("click", function(){
+    document.querySelectorAll(".admin-sidebar a").forEach(function(a){ a.classList.remove("active"); });
+    link.classList.add("active");
+    document.querySelectorAll(".admin-section").forEach(function(s){ s.style.display="none"; });
+    var sec = document.getElementById(link.dataset.section);
+    if(sec) sec.style.display="";
+  });
+});
+
+setupTypeFilterBtns();
+setupGenreChips();
+
 renderHome();
 renderBrowse();
 renderLatest();
 renderRanking("weekly");
+renderDetail();
