@@ -434,9 +434,16 @@ def map_mangadex(item):
                 genres.append(name)
 
     cover_file = ""
+    author = ""
+    artist = ""
     for rel in item.get("relationships") or []:
+        attrs = rel.get("attributes") or {}
         if rel.get("type") == "cover_art":
-            cover_file = (rel.get("attributes") or {}).get("fileName") or ""
+            cover_file = attrs.get("fileName") or ""
+        elif rel.get("type") == "author" and not author:
+            author = attrs.get("name") or ""
+        elif rel.get("type") == "artist" and not artist:
+            artist = attrs.get("name") or ""
 
     cover_url = f"https://uploads.mangadex.org/covers/{mid}/{cover_file}.512.jpg" if cover_file else ""
 
@@ -454,8 +461,8 @@ def map_mangadex(item):
         "popularity": follows,
         "genres": genres[:10],
         "tags": tags[:14],
-        "author": "",
-        "artist": "",
+        "author": author,
+        "artist": artist or author,
         "alt_title": alt_from_mangadex(attr.get("altTitles") or []),
         "description": clean_text(desc),
         "chapter_count": int(float(latest)) if str(latest).replace(".", "", 1).isdigit() else 0,
@@ -482,6 +489,8 @@ def fetch_mangadex(limit, search=None, included_tags=None, order="followedCount"
             ("limit", str(batch)),
             ("offset", str(offset)),
             ("includes[]", "cover_art"),
+            ("includes[]", "author"),
+            ("includes[]", "artist"),
             ("contentRating[]", "safe"),
             ("hasAvailableChapters", "true"),
             ("availableTranslatedLanguage[]", "en"),
