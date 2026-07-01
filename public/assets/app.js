@@ -64,7 +64,7 @@ function latestRow(item){
   const cover = item.cover_url || item.cover_image || item.image_url || item.thumbnail || item.poster || "";
   const hasCover = cover ? "" : " " + bg;
   const imgHtml = cover
-    ? '<img src="'+cover+'" alt="'+seriesTitle+'" loading="lazy" onerror="this.style.display=\'none\'">'
+    ? '<img src="'+cover+'" alt="'+seriesTitle+'" loading="lazy" onerror="this.src=\'\';this.style.display=\'none\'">'
     : '<span>'+seriesTitle.substring(0,8)+'</span>';
   const detailId = item.series_id || item.id || item.series_slug || "";
   return `<a class="latest-item" href="detail.html?id=${detailId}">
@@ -212,6 +212,10 @@ async function renderDetail(){
   if(metaEls.author) metaEls.author.textContent = series.author;
   if(metaEls.artist) metaEls.artist.textContent = series.artist;
   if(metaEls.rating) metaEls.rating.textContent = series.rating;
+  var elType = document.getElementById("metaType");
+  var elSched = document.getElementById("metaSchedule");
+  if(elType) elType.textContent = series.type || "-";
+  if(elSched) elSched.textContent = series.status || series.schedule || "-";
   if(genreEl) genreEl.innerHTML = (series.genres||[]).map(g => `<span class="genre-tag">${g}</span>`).join("");
   if(coverEl){
     const bg = coverClass[series.type] || "manga-bg";
@@ -252,7 +256,9 @@ async function renderDetail(){
   }
   if(chList && chData){
     var chs = chData.items || [];
-    var total = chData.total || 0;
+    var total = chData.total || chs.length || 0;
+    var elCh = document.getElementById("metaChapters");
+    if(elCh) elCh.textContent = (total || series.chapter_count || 0) + " chapters";
     if(chs.length > 0){
       chList.innerHTML = chs.map(function(ch){
         return "<a href='reader.html?chapter="+ch.id+"'><b>"+ch.title+"</b><span>"+(ch.updated_label||"")+"</span></a>";
