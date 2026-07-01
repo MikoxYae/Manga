@@ -65,7 +65,8 @@ function latestRow(item){
   const imgHtml = item.cover_url
     ? '<img src="'+item.cover_url+'" alt="'+seriesTitle+'" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.classList.add(\''+bg+'\')">'
     : seriesTitle.substring(0,6);
-  return `<a class="latest-item" href="detail.html?id=${item.id}">
+  const detailId = item.series_id || item.id || item.series_slug || "";
+  return `<a class="latest-item" href="detail.html?id=${detailId}">
     <div class="latest-cover${hasCover}">${imgHtml}</div>
     <div class="latest-info">
       <h4>${seriesTitle}</h4>

@@ -109,10 +109,11 @@ def ranking():
 @series_bp.route("/<series_id>", methods=["GET"])
 def get_series(series_id):
     db = get_db()
+    doc = None
     try:
         doc = db.series.find_one({"_id": ObjectId(series_id)})
     except Exception:
-        return jsonify({"error": "Invalid ID"}), 400
+        doc = db.series.find_one({"slug": series_id})
     if not doc:
         return jsonify({"error": "Not found"}), 404
     return jsonify(fmt(doc))

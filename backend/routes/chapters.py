@@ -27,12 +27,46 @@ def list_chapters(series_id):
     total  = db.chapters.count_documents({"series_id": oid})
     return jsonify({"items": [fmt(doc) for doc in cursor], "total": total, "page": page, "limit": limit})
 
+_COVER_FIELDS = ["cover_url", "cover_image", "coverImage", "image_url", "image", "thumbnail", "poster"]
+
+
+def _pick_cover(doc):
+    for field in _COVER_FIELDS:
+        val = doc.get(field)
+        if val and isinstance(val, str) and val.strip():
+            return val.strip()
+    return ""
+
+
 @chapters_bp.route("/latest", methods=["GET"])
 def latest_chapters():
     db = get_db()
     limit = min(30, int(request.args.get("limit", 14)))
-    cursor = db.chapters.find().sort("created_at", -1).limit(limit)
-    return jsonify([fmt(doc) for doc in cursor])
+    pipeline = [
+        {"$sort": {"created_at": -1}},
+        {"$limit": limit},
+        {"$lookup": {
+            "from": "series",
+            "localField": "series_id",
+            "foreignField": "_id",
+            "as": "series"
+        }},
+        {"$addFields": {"series_doc": {"$arrayElemAt": ["$series", 0]}}},
+        {"$addFields": {
+            "series_slug": "$series_doc.slug",
+            "type": {"$ifNull": ["$type", "$series_doc.type"]},
+            "genres": {"$ifNull": ["$series_doc.genres", []]},
+            "rating": "$series_doc.rating",
+            "views": "$series_doc.views",
+            "cover_url": {"$ifNull": ["$series_doc.cover_url", ""]},
+            "cover_image": {"$ifNull": ["$series_doc.cover_image", ""]},
+            "coverImage": {"$ifNull": ["$series_doc.coverImage", ""]},
+            "image_url": {"$ifNull": ["$series_doc.image_url", ""]},
+            "thumbnail": {"$ifNull": ["$series_doc.thumbnail", ""]},
+        }},
+        {"$project": {"series": 0, "series_doc": 0}}
+    ]
+    return jsonify([fmt(doc) | {"cover_url": _pick_cover(doc)} for doc in db.chapters.aggregate(pipeline)])
 
 @chapters_bp.route("/<chapter_id>", methods=["GET"])
 def get_chapter(chapter_id):

@@ -4,8 +4,20 @@ import re
 
 search_bp = Blueprint("search", __name__)
 
+_COVER_FIELDS = ["cover_url", "cover_image", "coverImage", "image_url", "image", "thumbnail", "poster"]
+
+
+def _pick_cover(doc):
+    for field in _COVER_FIELDS:
+        val = doc.get(field)
+        if val and isinstance(val, str) and val.strip():
+            return val.strip()
+    return ""
+
+
 def fmt(doc):
     doc["id"] = str(doc.pop("_id"))
+    doc["cover_url"] = _pick_cover(doc)
     return doc
 
 @search_bp.route("/", methods=["GET"])

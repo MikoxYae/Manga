@@ -29,6 +29,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from backend.database import get_db, init_db
+from pymongo.errors import DuplicateKeyError
 
 
 ANILIST_ENDPOINT = "https://graphql.anilist.co"
@@ -540,6 +541,24 @@ def fetch_curated(limit):
         yield clean
 
 
+def _series_update_doc(doc, now):
+    # MongoDB cannot update the same field in both $set and $setOnInsert.
+    # Keep created_at only for first insert, and never overwrite it on later imports.
+    set_doc = dict(doc)
+    set_doc.pop("created_at", None)
+    source_ids = set_doc.pop("source_ids", {}) or {}
+
+    set_values = dict(set_doc)
+    for key, value in source_ids.items():
+        if value:
+            set_values[f"source_ids.{key}"] = str(value)
+
+    return {
+        "$set": set_values,
+        "$setOnInsert": {"created_at": now},
+    }
+
+
 def upsert_series(db, doc):
     now = dt.datetime.utcnow()
     doc["title"] = clean_text(doc.get("title"))
@@ -556,23 +575,23 @@ def upsert_series(db, doc):
     source = doc.get("source")
     sid = (doc.get("source_ids") or {}).get(source) if source else None
 
-    query = None
+    query = {"slug": doc["slug"]}
     if source and sid:
         query = {f"source_ids.{source}": str(sid)}
-    if not query:
-        query = {"slug": doc["slug"]}
 
-    # MongoDB cannot update the same field in both $set and $setOnInsert.
-    # Keep created_at only for first insert, and never overwrite it on later imports.
-    set_doc = dict(doc)
-    set_doc.pop("created_at", None)
-    update = {
-        "$set": set_doc,
-        "$setOnInsert": {"created_at": now},
-    }
-    result = db.series.update_one(query, update, upsert=True)
-    saved = db.series.find_one(query)
-    return saved, bool(result.upserted_id)
+    update = _series_update_doc(doc, now)
+
+    try:
+        result = db.series.update_one(query, update, upsert=True)
+        saved = db.series.find_one(query)
+        return saved, bool(result.upserted_id)
+    except DuplicateKeyError:
+        # Same title can arrive from AniList and MangaDex with different source IDs.
+        # In that case, merge/update the existing slug instead of failing import.
+        slug_query = {"slug": doc["slug"]}
+        db.series.update_one(slug_query, {"$set": update["$set"]}, upsert=False)
+        saved = db.series.find_one(slug_query)
+        return saved, False
 
 
 def upsert_placeholder_chapters(db, series_doc, count):
