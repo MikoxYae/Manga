@@ -27,31 +27,22 @@
   <section class="detail-hero">
     <div class="detail-grid">
       <div class="big-cover manhwa-bg" id="seriesCover">
-        <span>Solo Leveling</span>
+        <span>Loading cover...</span>
       </div>
       <div class="detail-copy">
-        <div class="badges">
-          <span class="badge clean">Completed</span>
-          <span class="badge type-manhwa">Manhwa</span>
-          <span class="badge warn">Top Rated</span>
-        </div>
-        <h1 id="seriesTitle">Solo Leveling</h1>
-        <p class="alt-title" id="seriesAlt">Alternative title: Only I Level Up</p>
-        <p class="desc" id="seriesDesc">In a world where hunters fight monsters from mysterious gates, a weak hunter receives a hidden system and begins a path of extraordinary growth, danger and discovery. A manhwa celebrated for its stunning art and compelling power fantasy.</p>
-        <div class="genre-tags" id="seriesGenres">
-          <span class="genre-tag">Action</span>
-          <span class="genre-tag">Fantasy</span>
-          <span class="genre-tag">Adventure</span>
-          <span class="genre-tag">Hunters</span>
-        </div>
+        <div class="badges" id="seriesBadges"><span class="badge">Loading</span></div>
+        <h1 id="seriesTitle">Loading series...</h1>
+        <p class="alt-title" id="seriesAlt"></p>
+        <p class="desc" id="seriesDesc">Loading details from database...</p>
+        <div class="genre-tags" id="seriesGenres"></div>
         <div class="meta-grid">
-          <div class="meta-item"><b>Status</b><span id="metaStatus">Completed</span></div>
-          <div class="meta-item"><b>Author</b><span id="metaAuthor">Chugong</span></div>
-          <div class="meta-item"><b>Artist</b><span id="metaArtist">DUBU</span></div>
-          <div class="meta-item"><b>Rating</b><span id="metaRating" style="color:#fcd34d;font-size:16px;font-weight:800">9.6</span></div>
+          <div class="meta-item"><b>Status</b><span id="metaStatus">-</span></div>
+          <div class="meta-item"><b>Author</b><span id="metaAuthor">-</span></div>
+          <div class="meta-item"><b>Artist</b><span id="metaArtist">-</span></div>
+          <div class="meta-item"><b>Rating</b><span id="metaRating" style="color:#fcd34d;font-size:16px;font-weight:800">-</span></div>
         </div>
         <div class="hero-actions">
-          <a class="primary" href="reader.html">Start Reading</a>
+          <a class="primary" id="startReading" href="reader.html">Start Reading</a>
           <a class="secondary" href="#chapters">Chapter List</a>
           <a class="secondary" href="browse.html">More Like This</a>
         </div>
@@ -63,20 +54,9 @@
     <div class="content-card">
       <div class="chapter-toolbar">
         <h2>Chapter list</h2>
-        <input placeholder="Search chapters..." type="search">
+        <input id="chapterSearch" placeholder="Search chapters..." type="search">
       </div>
-      <div class="chapter-list" id="chapterList">
-        <a href="reader.html"><b>Chapter 201 - Final Chapter</b><span>2 hours ago</span></a>
-        <a href="reader.html"><b>Chapter 200</b><span>1 day ago</span></a>
-        <a href="reader.html"><b>Chapter 199</b><span>3 days ago</span></a>
-        <a href="reader.html"><b>Chapter 198</b><span>1 week ago</span></a>
-        <a href="reader.html"><b>Chapter 197</b><span>1 week ago</span></a>
-        <a href="reader.html"><b>Chapter 196</b><span>2 weeks ago</span></a>
-        <a href="reader.html"><b>Chapter 195</b><span>2 weeks ago</span></a>
-        <a href="reader.html"><b>Chapter 194</b><span>3 weeks ago</span></a>
-        <a href="reader.html"><b>Chapter 193</b><span>1 month ago</span></a>
-        <a href="reader.html"><b>Chapter 192</b><span>1 month ago</span></a>
-      </div>
+      <div class="chapter-list" id="chapterList"><p class="sub" style="padding:18px 0">Loading chapters...</p></div>
       <div class="pagination" id="chapterPagination">
         <a class="active-page">1</a>
         <a>2</a>
@@ -106,28 +86,7 @@
         <div><span class="eyebrow">Discover</span><h2>Related series</h2></div>
         <a class="pill" href="browse.html">See more</a>
       </div>
-      <div class="related-grid">
-        <a class="manga-card" href="detail.html">
-          <div class="cover manhwa-bg"><span class="cover-badge">Manhwa</span><span class="cover-title">Omniscient Reader</span></div>
-          <div class="manga-body"><h3>Omniscient Reader</h3><p>Action, Fantasy</p><div class="card-meta"><span class="badge type-manhwa">Manhwa</span><span class="rating">9.4</span></div></div>
-        </a>
-        <a class="manga-card" href="detail.html">
-          <div class="cover manhwa-bg"><span class="cover-badge">Manhwa</span><span class="cover-title">Tower of God</span></div>
-          <div class="manga-body"><h3>Tower of God</h3><p>Adventure</p><div class="card-meta"><span class="badge type-manhwa">Manhwa</span><span class="rating">9.2</span></div></div>
-        </a>
-        <a class="manga-card" href="detail.html">
-          <div class="cover manhwa-bg"><span class="cover-badge">Manhwa</span><span class="cover-title">Eleceed</span></div>
-          <div class="manga-body"><h3>Eleceed</h3><p>Action, Comedy</p><div class="card-meta"><span class="badge type-manhwa">Manhwa</span><span class="rating">9.1</span></div></div>
-        </a>
-        <a class="manga-card" href="detail.html">
-          <div class="cover manhwa-bg"><span class="cover-badge">Manhwa</span><span class="cover-title">Nano Machine</span></div>
-          <div class="manga-body"><h3>Nano Machine</h3><p>Martial Arts</p><div class="card-meta"><span class="badge type-manhwa">Manhwa</span><span class="rating">9.0</span></div></div>
-        </a>
-        <a class="manga-card" href="detail.html">
-          <div class="cover manhwa-bg"><span class="cover-badge">Manhwa</span><span class="cover-title">Return of Mt. Hua Sect</span></div>
-          <div class="manga-body"><h3>Return of Mt. Hua Sect</h3><p>Martial Arts</p><div class="card-meta"><span class="badge type-manhwa">Manhwa</span><span class="rating">9.2</span></div></div>
-        </a>
-      </div>
+      <div class="related-grid" id="relatedGrid"><p class="sub">Loading related series...</p></div>
     </div>
   </section>
 </main>

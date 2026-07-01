@@ -655,3 +655,26 @@ h1,h2,h3,h4{line-height:1.1}
   .ranking-item a{grid-template-columns:40px 1fr auto}
   .detail-grid{grid-template-columns:1fr}
 }
+
+/* Detail dynamic data fixes */
+.chapter-list a.chapter-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:14px;
+  align-items:center;
+}
+.chapter-main{min-width:0;display:grid;gap:3px}
+.chapter-main b{white-space:normal;overflow-wrap:anywhere;line-height:1.35}
+.chapter-main small{font-size:11px;color:var(--muted);font-weight:500}
+.pagination a{cursor:pointer}
+.pagination a.page-gap{cursor:default;opacity:.65}
+.reader-nav a.disabled{opacity:.45;pointer-events:none}
+.big-cover img + span,.cover img + .cover-badge,.cover img + .cover-badge + .cover-title{position:relative;z-index:2;text-shadow:0 2px 16px rgba(0,0,0,.75)}
+.related-grid .manga-card{min-width:0}
+
+@media(max-width:768px){
+  .chapter-list a.chapter-row{grid-template-columns:1fr;gap:5px;padding:13px 14px}
+  .chapter-list a.chapter-row span{text-align:left}
+  .detail-hero{padding-top:28px}
+  .detail-copy .desc{font-size:14px}
+}
