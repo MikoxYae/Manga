@@ -236,11 +236,38 @@ async function renderDetail(){
 
   const chData = await apiFetch("/api/chapters/series/" + id + "?limit=20");
   const chList = document.getElementById("chapterList");
+  const chPage = document.getElementById("chapterPagination");
+  function buildPagination(tp){
+    if(!chPage) return;
+    if(tp <= 1){ chPage.style.display="none"; return; }
+    var h = "<a class='active-page'>1</a>";
+    if(tp>1) h += "<a>2</a>";
+    if(tp>2) h += "<a>3</a>";
+    if(tp>4) h += "<a>...</a>";
+    if(tp>3) h += "<a>"+tp+"</a>";
+    h += "<a>Next</a>";
+    chPage.innerHTML = h; chPage.style.display = "";
+  }
   if(chList && chData){
-    const chs = chData.items || [];
-    chList.innerHTML = chs.map(ch =>
-      `<a href="reader.html?chapter=${ch.id}"><b>${ch.title}</b><span>${ch.updated_label||""}</span></a>`
-    ).join("");
+    var chs = chData.items || [];
+    var total = chData.total || 0;
+    if(chs.length > 0){
+      chList.innerHTML = chs.map(function(ch){
+        return "<a href='reader.html?chapter="+ch.id+"'><b>"+ch.title+"</b><span>"+(ch.updated_label||"")+"</span></a>";
+      }).join("");
+      buildPagination(Math.ceil(total/20));
+    } else if((series.chapter_count||0) > 0){
+      var cnt = series.chapter_count;
+      var rows = [];
+      for(var n = cnt; n > Math.max(0, cnt-20); n--){
+        rows.push("<a href='reader.html'><b>Chapter "+n+"</b><span></span></a>");
+      }
+      chList.innerHTML = rows.join("");
+      buildPagination(Math.ceil(cnt/20));
+    } else {
+      chList.innerHTML = "<p style='padding:20px 0;color:#9ca3af;text-align:center'>No chapters available yet.</p>";
+      if(chPage) chPage.style.display="none";
+    }
   }
 }
 
@@ -373,7 +400,7 @@ async function renderFeatured(){
   var slidesHtml = items.slice(0,3).map(function(item,i){
     var bg = bgColors[i] || bgColors[0];
     var bgStyle = item.cover_url
-      ? "background:linear-gradient(140deg,"+bg+"),url('"+item.cover_url+"') center top/cover no-repeat"
+      ? "background:linear-gradient(140deg,"+bg+"),url("+JSON.stringify(item.cover_url)+") center top/cover no-repeat"
       : "background:linear-gradient(140deg,"+bg+")";
     var tc = typeClass[item.type] || "";
     var statusBadge = item.status ? "<span class='badge clean'>"+item.status+"</span>" : "";
