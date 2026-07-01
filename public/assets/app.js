@@ -61,10 +61,11 @@ function latestRow(item){
   const bg = coverClass[item.type] || "manga-bg";
   const bc = badgeClass[item.type] || "";
   const seriesTitle = item.series_title || item.title || "";
-  const hasCover = item.cover_url ? "" : " " + bg;
-  const imgHtml = item.cover_url
-    ? '<img src="'+item.cover_url+'" alt="'+seriesTitle+'" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.classList.add(\''+bg+'\')">'
-    : seriesTitle.substring(0,6);
+  const cover = item.cover_url || item.cover_image || item.image_url || item.thumbnail || item.poster || "";
+  const hasCover = cover ? "" : " " + bg;
+  const imgHtml = cover
+    ? '<img src="'+cover+'" alt="'+seriesTitle+'" loading="lazy" onerror="this.style.display=\'none\'">'
+    : '<span>'+seriesTitle.substring(0,8)+'</span>';
   const detailId = item.series_id || item.id || item.series_slug || "";
   return `<a class="latest-item" href="detail.html?id=${detailId}">
     <div class="latest-cover${hasCover}">${imgHtml}</div>
